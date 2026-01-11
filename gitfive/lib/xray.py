@@ -359,4 +359,7 @@ async def analyze_ext_contribs(runner: GitfiveRunner):
                     if not name in runner.target.usernames_history[username]["names"]:
                         runner.target._add_name(name) # Previous names are valid informations (unless target spoof it)
                         runner.target.usernames_history[username]["names"][name] = {"repos": set()}
-                    runner.target.usernames_history[username]["names"][name]["repos"].add(repo_name)
+                    try:
+                        runner.target.usernames_history[username]["names"][name]["repos"].add(repo_name)
+                    except KeyError as error:
+                        continue
