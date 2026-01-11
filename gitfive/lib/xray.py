@@ -42,9 +42,20 @@ def get_repo(token: str, target_username: str, target_id: int, repos_folder: Pat
 
             # Repo example to git clone : https://github.com/novitae/Aet-s-Tools
 
-            pass # In fact, it fails to checkout but commits are cloned, so we don't care. 💅
-
-        repo = Repo(repo_path)
+            # Check if repo_path exists (clone might have partially succeeded)
+            if not repo_path.exists():
+                # Clone completely failed (e.g., disabled repo, 403 error, etc.)
+                return results
+            # In fact, it fails to checkout but commits are cloned, so we don't care. 
+            repo = Repo(repo_path)
+        else:
+            # Other GitCommandError (e.g., 403 Forbidden for disabled repos)
+            # Return empty results if clone completely failed
+            return results
+    except Exception as error:
+        # Catch any other exceptions (e.g., NoSuchPathError if path doesn't exist)
+        # Return empty results if we can't access the repo
+        return results
 
     if not repo.refs:
         # Empty repo, no branch
