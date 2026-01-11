@@ -50,6 +50,17 @@ $ pipx install gitfive
 ```
 It will automatically use venvs to avoid dependency conflicts with other projects.
 
+## Docker
+
+```bash
+$ docker build -t gitfive:latest . 
+$ docker run -it --name gitfive gitfive:latest python3 main.py login
+$ docker start gitfive
+$ docker exec -it gitfive python3 main.py user <username>
+```
+
+**Note:** Using a named container (`--name gitfive`) allows you to persist credentials between runs. The `-it` flags are required for interactive input (login prompts). Use `docker start gitfive` to start the container, then `docker exec -it gitfive` to run commands in it.
+
 # Usage
 First, login to GitHub *(preferably with a secondary account)* :
 ```bash
