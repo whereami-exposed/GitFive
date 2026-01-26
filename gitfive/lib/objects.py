@@ -227,8 +227,11 @@ class Credentials():
                 req = await self._as_client.get("https://github.com/sessions/two-factor/app", follow_redirects=False)
                 body = bs(req.text, 'html.parser')
                 form = body.find("form", {"action": "/sessions/two-factor"})
+                if not form:
+                    exit("[-] Could not find two-factor authentication form. Please try again.")
                 authenticity_token = form.find("input", {"name": "authenticity_token"}).attrs["value"]
-                msg = form.find("div", {"class": "mt-3"}).text
+                msg_div = form.find("div", {"class": "mt-3"})
+                msg = msg_div.text if msg_div else "Enter your two-factor authentication code"
                 rprint(f'[bold]🗨️ Github :[/bold] [italic]"{msg}"')
                 app_otp = pwinput("📱 Code => ")
                 data = {
